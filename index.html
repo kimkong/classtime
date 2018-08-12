@@ -3,19 +3,17 @@
 <head>
 <title>Class Time Minder</title>
 <meta charset="utf-8"/>
-<link href="https://fonts.googleapis.com/css?family=Lato|Merriweather" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato|Yatra+One" rel="stylesheet">
 
-
-
-    
-
-    
 
 
 <style type="text/css">
 html { margin: 2em; }
 body { font-family: 'Lato', sans-serif; background-color:#232323; color: #efefef;}  
+a:link, a:visited { color:#8a83ff; }
 div  {color:#aaa;}
+h1 	 { font-family: 'Yatra One', cursive; text-align:center; font-weight:normal;}
+
 #remaining_time {font-size: 60px; font-family: 'Lato', sans-serif; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080; font-variant: small-caps; } 
 #clock { font-family: 'Lato', sans-serif; text-align:center; }
 #name { font-variant:small-caps; }
@@ -24,8 +22,6 @@ div  {color:#aaa;}
 .center-text { text-align: center; }
 .panel {float:left; height:22rem;}
 
-h1 	 { font-family: 'Merriweather', serif; text-align: center;}
-a:link, a:visited { color:#8a83ff; }
 button {
     display: inline-block;
     border: none;
@@ -43,20 +39,9 @@ button {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
-
-button:hover,
-button:focus {
-    background: #0053ba;
-}
-
-button:focus {
-    outline: 1px solid #fff;
-    outline-offset: -4px;
-}
-
-button:active {
-    transform: scale(0.99);
-}
+button:hover, button:focus {background: #0053ba; }
+button:focus {outline: 1px solid #fff; outline-offset: -4px; }
+button:active {transform: scale(0.99); }
 </style>
 
 <script type="text/javascript"> var override = "default"; </script>
@@ -75,25 +60,44 @@ button:active {
 
 	<div class="panel" style="width:70%;">
 
-		<div style="width: 10em; text-align: center; margin: 20px auto;">
+		<div style="position:relative; top:20%;">
+	    <div style="text-align: center; font-size: 4em;">
+	      <span id="remaining_time">&nbsp;</span>
+	    </div>
+	    <div style="text-align: center; font-size: 1.5em; margin-top: 1em;">
+	      <span id="name">&nbsp;</span>
+	      <span id="period">&nbsp;</span>
+	    </div>
 		</div>
-    
-    <div style="text-align: center; font-size: 4em;">
-      <span id="remaining_time">&nbsp;</span>
-    </div>
-    <div style="text-align: center; font-size: 1.5em; margin-top: 1em;">
-      <span id="name">&nbsp;</span>
-      <span id="period">&nbsp;</span>
-    </div>
 
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
+	</div>
+
+	<div class="panel" style="width:30%;">
+		<div style="font-size: 1.25em; font-variant: small-caps; color:#666">CURRENT TIME  <span id="clock">&nbsp;</span></div> 
+		<br>
+		<br>
+		<div style="font-size: 1.25em; font-variant: small-caps; color:#666">SETTINGS:</div> 
+		     
+		<div>
+		  <input type="radio" id="contactChoice1"
+		   onClick="setScheduleType('MS')", name="contact" value="MS" checked>
+		  <label for="contactChoice1">Middle School</label>
+
+		  <input type="radio" id="contactChoice2"
+		   onClick="setScheduleType('HS')", name="contact" value="HS">
+		  <label for="contactChoice2">High School</label>
+		</div>
+
+		<br/>
+		<br/>
+		<hr>
+		<br/>
+		<br/>
+
+		<div class="center-text" style="text-align:center;height:6em; "><span id="counter">00:00</span></div>
+	</div>
+
+	<div class="panel" style="width:70%;height:100%;">
     <div style="text-align: center; font-size: 1.5em;">
       <button onClick="setSchedule('default')", type="button">default</button> 
       <button onClick="setSchedule('RallyA')", 	type="button">rally a</button> 
@@ -105,28 +109,7 @@ button:active {
     </div>
 	</div>
 
-	<div class="panel" style="width:30%;">
-		<div style="font-size: 1.25em; font-variant: small-caps; color:#666">CURRENT TIME  <span id="clock">&nbsp;</span></div> 
-		<br>
-		<br>
-		<div style="font-size: 1.25em; font-variant: small-caps; color:#666">SETTINGS:</div> 
-		     
-		<div>
-		  <input type="radio" id="contactChoice1"
-		   name="contact" value="MS">
-		  <label for="contactChoice1">Middle School</label>
-
-		  <input type="radio" id="contactChoice2"
-		   name="contact" value="HS">
-		  <label for="contactChoice2">High School</label>
-		</div>
-
-		<br/>
-		<br/>
-		<hr>
-		<br/>
-		<br/>
-				<div class="center-text" style="text-align:center;height:6em; "><span id="counter">00:00</span></div>
+	<div class="panel" style="width:30%;height:100%;">
 		<div class="timer_buttons center-text">
 	    <button onClick="countdown(10)", type="button">10</button> 
 	    <button onClick="countdown(5)",  type="button">5</button> 
@@ -136,10 +119,11 @@ button:active {
 	    <button onClick="clearCountdown()",  type="button">0</button> 
 		</div>
 	</div>
-
 </div>
 
 <div style="clear: both;"> </div>
+
+
 <br/>
 <br/>
 <br/>
@@ -152,12 +136,22 @@ button:active {
 
 
 
+
+
+
+
 <script type="text/javascript">
 <!--
-timer_minutes = 0;
 countdown_timer = null;
+schedule_type   = "MS";   // SET TO MS OR HS
+timer_minutes   = 0;
+
 
 function setSchedule(name) {schedule_name = name; }
+
+function setScheduleType(type) {
+	schedule_type = type;
+}
 
 function clearCountdown() {
   clearTimeout(countdown_timer);
@@ -188,9 +182,41 @@ function countdown(minutes) {
           countdown_timer = countdown(mins-1);
         }
       }
+  		if (minutes==1 && seconds==3) { 
+  	  	beep(100, 420, 200);
+ 				document.getElementById("counter").style.color = "#ffff66";
+   	  };
+  		if (minutes==1 && seconds==2) { 
+  	  	beep(100, 420, 200); 
+ 				document.getElementById("counter").style.color = "#ffb366";
+  	  };
+  		if (minutes==1 && seconds==1) { 
+  	  	beep(100, 420, 200);
+ 				document.getElementById("counter").style.color = "#ff6666";
+  	  };
+  		if (minutes==1 && seconds==0) { 
+  	  	beep(120, 640, 600);
+ 				document.getElementById("counter").style.color = "#ff0000";
+  		};
     }
   tick();
 }
+
+
+a=new AudioContext() // browsers limit the number of concurrent audio contexts, so you better re-use'em
+
+function beep(vol, freq, duration){
+  v=a.createOscillator()
+  u=a.createGain()
+  v.connect(u)
+  v.frequency.value=freq
+  v.type="square"
+  u.connect(a.destination)
+  u.gain.value=vol*0.01
+  v.start(a.currentTime)
+  v.stop(a.currentTime+duration*0.001)
+}
+
 
 
 function timeNow() {
@@ -287,7 +313,7 @@ function selectSchedule(schedules, schedule_type, schedule_name, now) {
 	// NOT checking for schedule_type yet. 
 	if (schedule_name=="default" || schedule_name=="") {
 		for (var i = 0; i < schedules.length; i++) {
-	    if (checkDow(schedules[i], now)) {
+	    if ( checkDow(schedules[i], now) && schedules[i].type==schedule_type ) {
 	    	return schedules[i]
 	    }
 		} 
@@ -302,9 +328,9 @@ function selectSchedule(schedules, schedule_type, schedule_name, now) {
 
 
 
-function showCountdown(data_hash) {
+function showCountdown(schedules) {
 	now = timeNow();
-  schedule = selectSchedule(data_hash, schedule_type, schedule_name, now);
+  schedule = selectSchedule(schedules, schedule_type, schedule_name, now);
 
 	for (var i = 0; i < schedule.periods.length; i++) {
 		// console.log("current schedule: "+schedule_name);
@@ -319,6 +345,7 @@ function showCountdown(data_hash) {
     document.getElementById("period").firstChild.nodeValue = current_period.name+"  ["+current_period.start_time+" to "+current_period.end_time+"]";
     document.getElementById("remaining_time").firstChild.nodeValue = getTimeRemaining(current_period, now);
 	} 
+
 }
 
 showCountdown(data)

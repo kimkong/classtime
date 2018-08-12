@@ -2,7 +2,7 @@
 // 2018 Dr. Kenny Kim dynaWEBworks
 //
 // TIME MUST BE IN 24HRS
-
+// SUNDAY = 0  MONDAY = 1
 base_time = new Date("2018-08-09 18:30:00")
 schedule_name = "default";			// name from data array
 schedule_type = "MS";  	// MS or HS
@@ -21,7 +21,7 @@ function test_pertime(min_offset) {
 data = [
 {
 	name: "Regular Day MS",
-	dow: [2,3,4,5,6,7],
+	dow: [2,3,4,5,6,0],
 	type: "MS",
 	periods: [
 		{ name: 'Period 0 (Optional)',	start_time: '6:44', end_time: '7:54' },
@@ -43,7 +43,7 @@ data = [
 },
 {
 	name: "Regular Day HS",
-	dow: [2,3,4,5,6,7],
+	dow: [2,3,4,5,6,0],
 	type: "HS",
 	periods: [
 		{ name: 'Period 0 (Optional)',	start_time: '6:44',  end_time: '7:54' },
@@ -187,15 +187,21 @@ data = [
 		{ name: 'Passing to Period 6', 		start_time: '14:14', end_time: '14:20' },
 		{ name: 'Period 6', 							start_time: '14:20', end_time: '15:06' }	
 	]
-},{
+},
+{
 	name: "Block",
 	dow: [],
 	type: "",
 	periods: [
-	  { name: 'Period 0',            start_time: test_pertime(0), end_time: test_pertime(1) },
-	  { name: 'Passing to Period 1', start_time: test_pertime(1), end_time: test_pertime(2) },
-	  { name: 'Period 1',            start_time: test_pertime(2), end_time: test_pertime(3) },
-	  { name: 'Passing to Period 2', start_time: test_pertime(3), end_time: test_pertime(4) },
+	  { name: 'Period 0 (optional)', start_time: '6:44', end_time: '7:54' },
+	  { name: 'Passing to Period A', start_time: '7:54', end_time: '8:00' },
+	  { name: 'Period A',            start_time: '8:00', end_time: '10:00' },
+	  { name: 'Snack',   						 start_time: '10:00', end_time: '10:14' },
+	  { name: 'Passing to Period B', start_time: '10:14', end_time: '10:20' },
+	  { name: 'Period B',            start_time: '10:20', end_time: '12:20' },
+	  { name: 'Lunch',   						 start_time: '12:20', end_time: '13:00' },
+	  { name: 'Passing to Period C', start_time: '13:00', end_time: '13:06' },
+	  { name: 'Period C',            start_time: '13:06', end_time: '15:06' }
 	]
 },
 {
@@ -203,10 +209,20 @@ data = [
 	dow: [],
 	type: "",
 	periods: [
-	  { name: 'Period 0',            start_time: test_pertime(0), end_time: test_pertime(1) },
-	  { name: 'Passing to Period 1', start_time: test_pertime(1), end_time: test_pertime(2) },
-	  { name: 'Period 1',            start_time: test_pertime(2), end_time: test_pertime(3) },
-	  { name: 'Passing to Period 2', start_time: test_pertime(3), end_time: test_pertime(4) },
+	  { name: 'Period 0',            start_time: test_pertime(0),  end_time: test_pertime(1) },
+	  { name: 'Passing to Period 1', start_time: test_pertime(1),  end_time: test_pertime(2) },
+	  { name: 'Period 1',            start_time: test_pertime(2),  end_time: test_pertime(3) },
+	  { name: 'Passing to Period 2', start_time: test_pertime(3),  end_time: test_pertime(4) },
+	  { name: 'Passing to Period 3', start_time: test_pertime(4),  end_time: test_pertime(5) },
+		{ name: 'Period 3', 					 start_time: test_pertime(5),  end_time: test_pertime(6) },
+		{ name: 'Passing to Period 4', start_time: test_pertime(6),  end_time: test_pertime(7) },
+		{ name: '4A Rally', 					 start_time: test_pertime(7),  end_time: test_pertime(8) },
+		{ name: 'Period 4', 					 start_time: test_pertime(8),  end_time: test_pertime(9) },
+		{ name: 'Lunch', 							 start_time: test_pertime(9),  end_time: test_pertime(10) },
+		{ name: 'Passing to Period 5', start_time: test_pertime(10), end_time: test_pertime(11) },
+		{ name: 'Period 5', 					 start_time: test_pertime(11), end_time: test_pertime(12) },
+		{ name: 'Passing to Period 6', start_time: test_pertime(12), end_time: test_pertime(13) },
+		{ name: 'Period 6', 					 start_time: test_pertime(13), end_time: test_pertime(14) }	
 	]
 }
 ]
