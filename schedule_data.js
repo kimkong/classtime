@@ -5,7 +5,6 @@
 // SUNDAY = 0  MONDAY = 1
 base_time = new Date("2018-08-09 18:30:00")
 schedule_name = "default";			// name from data array
-schedule_type = "MS";  	// MS or HS
 
 
 function test_pertime(min_offset) {
@@ -24,11 +23,11 @@ data = [
 	dow: [2,3,4,5,6,0],
 	type: "MS",
 	periods: [
-		{ name: 'Period 0 (Optional)',	start_time: '6:44', end_time: '7:54' },
-		{ name: 'Passing to Period 1',	start_time: '7:54', end_time: '8:00' },
-		{ name: 'Period 1',							start_time: '8:00', end_time: '8:58' },
-		{ name: 'Passing to Period 2',	start_time: '8:58', end_time: '9:04' },
-		{ name: 'Period 2',							start_time: '9:04', end_time: '10:10' },
+		{ name: 'Period 0 (Optional)',	start_time: '6:44',  end_time: '7:54' },
+		{ name: 'Passing to Period 1',	start_time: '7:54',  end_time: '8:00' },
+		{ name: 'Period 1',							start_time: '8:00',  end_time: '8:58' },
+		{ name: 'Passing to Period 2',	start_time: '8:58',  end_time: '9:04' },
+		{ name: 'Period 2',							start_time: '9:04',  end_time: '10:10' },
 		{ name: 'Snack',								start_time: '10:10', end_time: '10:19' },
 		{ name: 'Passing to Period 3',	start_time: '10:19', end_time: '10:25' },
 		{ name: 'Period 3',							start_time: '10:25', end_time: '11:23' },
