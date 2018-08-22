@@ -3,7 +3,7 @@
 <head>
 <title>Class Time Minder</title>
 <meta charset="utf-8"/>
-<link href="https://fonts.googleapis.com/css?family=Lato|Yatra+One" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAgICAAP///wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAhAAAAAAECICIBAAAAEiIgIiIQAAACIiIiIgAAASIiIiIiIQACIiIiIiIiAAAAIiMzMwAAAiIiIyIiIgABIiIjIiIhAAACIiMiIgAAABIiIyIiEAAAAQIjIgEAAAAAASAhAAAAAAAAAAAAAAD//wAA+D8AAOAPAADABwAAgAMAAIADAAAAAQAAAAEAAAABAAAAAQAAAAEAAIADAACAAwAAwAcAAOAPAAD4PwAA" rel="icon" type="image/x-icon" />
 
 <style type="text/css">
@@ -11,7 +11,7 @@ html { margin: 2em; }
 body { font-family: 'Lato', sans-serif; background-color:#232323; color: #efefef;}  
 a:link, a:visited { color:#8a83ff; }
 div  {color:#aaa;}
-h1 	 { font-family: 'Yatra One', cursive; text-align:center; font-weight:normal;}
+h1 	 { text-align:center; font-weight:normal;}
 
 #remaining_time {font-size: 160px; font-family: 'Lato', sans-serif; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080; font-variant: small-caps; } 
 #clock { font-family: 'Lato', sans-serif; text-align:center; }
@@ -50,7 +50,7 @@ button:active {transform: scale(0.99); }
 </head>
 <body onload="showCountdown(data); setInterval('showCountdown(data)', 1000 )">
 
-<h1>Class Time Minder</h1>
+<h1>Class Time Minder: <span id="name">&nbsp;</span></h1>
 
 <div style="width:100%">
   <br/>
@@ -60,12 +60,15 @@ button:active {transform: scale(0.99); }
 	<div class="panel" style="width:70%;">
 
 		<div style="position:relative; top:10%;">
-	    <div style="text-align: center; font-size: 4em;">
-	      <span id="remaining_time">&nbsp;</span>
-	    </div>
-	    <div style="text-align: center; font-size: 1.5em; margin-top: 1em;">
-	      <span id="name">&nbsp;</span>
-	      <span id="period">&nbsp;</span>
+      <div style="text-align: center; font-size: 1.5em; margin-top: 1em;">
+        <span id="period_name">&nbsp;</span>
+      </div>
+      <div style="text-align: center; font-size: 4em;">
+        <span id="remaining_time">&nbsp;</span>
+      </div>
+      <div style="text-align: center; font-size: 1.5em; margin-top: 1em;">
+        <span id="period_span">&nbsp;</span>
+	      <span id="next_period_name">&nbsp;</span>
 	    </div>
 		</div>
 
@@ -79,11 +82,11 @@ button:active {transform: scale(0.99); }
 		     
 		<div>
 		  <input type="radio" id="contactChoice1"
-		   onClick="setScheduleType('MS')", name="contact" value="MS" checked>
+		   onClick="setScheduleType('MS')", name="contact" value="MS">
 		  <label for="contactChoice1">Middle School</label>
 
 		  <input type="radio" id="contactChoice2"
-		   onClick="setScheduleType('HS')", name="contact" value="HS">
+		   onClick="setScheduleType('HS')", name="contact" value="HS" checked>
 		  <label for="contactChoice2">High School</label>
 		</div>
 
@@ -110,6 +113,7 @@ button:active {transform: scale(0.99); }
 
 	<div class="panel" style="width:30%;height:100%;">
 		<div class="timer_buttons center-text">
+      <!-- add input field for random timer -->
 	    <button onClick="countdown(10)", type="button">10</button> 
 	    <button onClick="countdown(5)",  type="button">5</button> 
 	    <button onClick="countdown(3)",  type="button">3</button> 
@@ -341,7 +345,8 @@ function showCountdown(schedules) {
     }
     document.getElementById("clock").firstChild.nodeValue = dateToHumanTime(now);
     document.getElementById("name").firstChild.nodeValue = schedule.name;
-    document.getElementById("period").firstChild.nodeValue = current_period.name+"  ["+current_period.start_time+" to "+current_period.end_time+"]";
+    document.getElementById("period_name").firstChild.nodeValue = current_period.name;
+    document.getElementById("period_span").firstChild.nodeValue = "  ["+current_period.start_time+" to "+current_period.end_time+"]";
     document.getElementById("remaining_time").firstChild.nodeValue = getTimeRemaining(current_period, now);
 	} 
 
@@ -352,3 +357,4 @@ showCountdown(data)
 
 // -->
 </script>
+
