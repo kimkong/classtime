@@ -6,13 +6,13 @@ import './App.css';
 class ClassTimer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.butthole = {
       name: "hi there!"
     };
   }
   render() {
     return (
-      <h1>Class Time Minder: "{this.state.name}"</h1>
+      <h1>Class Time Minder: "{this.butthole.name}"</h1>
     );
   }
 }
