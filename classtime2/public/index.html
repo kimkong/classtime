@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+  </head>
+  <body onload="showCountdown(data); setInterval('showCountdown(data)', 1000 )">
+
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+
+    <div id="root"></div>
+
+    <div style="width:100%">
+      <br/>
+      <br/>
+      <br/>
+
+      <div class="panel" style="width:70%;">
+
+        <div style="position:relative; top:10%;">
+          <div style="text-align: center; font-size: 1.5em; margin-top: 1em;">
+            <span id="period_name">&nbsp;</span>
+          </div>
+          <div style="text-align: center; font-size: 4em;">
+            <span id="remaining_time">&nbsp;</span>
+          </div>
+          <div style="text-align: center; font-size: 1.5em; margin-top: 1em;">
+            <span id="period_span">&nbsp;</span>
+            <span id="next_period_name">&nbsp;</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel" style="width:30%;">
+        <div style="font-size: 1.25em; font-variant: small-caps; color:#666">CURRENT TIME  <span id="clock">&nbsp;</span></div> 
+        <br>
+        <br>
+        <div style="font-size: 1.25em; font-variant: small-caps; color:#666">SETTINGS:</div> 
+             
+        <div>
+          <input type="radio" id="contactChoice1"
+           onClick="setScheduleType('MS')", name="contact" value="MS">
+          <label for="contactChoice1">Middle School</label>
+
+          <input type="radio" id="contactChoice2"
+           onClick="setScheduleType('HS')", name="contact" value="HS" checked>
+          <label for="contactChoice2">High School</label>
+        </div>
+
+        <br/>
+        <br/>
+        <hr>
+        <br/>
+        <br/>
+
+        <div class="center-text" style="text-align:center;height:6em; "><span id="counter">00:00</span></div>
+      </div>
+
+      <div class="panel" style="width:70%;height:100%;">
+        <div style="text-align: center; font-size: 1.5em;">
+          <button onClick="setSchedule('default')", type="button">default</button> 
+          <button onClick="setSchedule('RallyA')",  type="button">rally a</button> 
+          <button onClick="setSchedule('RallyB')",  type="button">rally b</button> 
+          <button onClick="setSchedule('Block')",   type="button">block</button> 
+          <button onClick="setSchedule('Finals')",  type="button">finals</button> 
+          <button onClick="setSchedule('Minimum')", type="button">minimum</button> 
+          <button onClick="setSchedule('Test')",    type="button">test</button> 
+        </div>
+      </div>
+
+      <div class="panel" style="width:30%;height:100%;">
+        <div class="timer_buttons center-text">
+          <!-- add input field for random timer -->
+          <button onClick="countdown(10)", type="button">10</button> 
+          <button onClick="countdown(5)",  type="button">5</button> 
+          <button onClick="countdown(3)",  type="button">3</button> 
+          <button onClick="countdown(2)",  type="button">2</button> 
+          <button onClick="countdown(1)",  type="button">1</button> 
+          <button onClick="clearCountdown()",  type="button">0</button> 
+        </div>
+      </div>
+    </div>
+
+    <div style="clear: both;"> </div>
+
+
+    <br/>
+    <br/>
+    <br/>
+
+    <hr/>
+    <p><small>Revised 2018-08-11 &copy;2018 <a href="https://www.dynawebworks.com">dynaWEBworks</a></small></p>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
