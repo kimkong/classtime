@@ -12,7 +12,7 @@ class ClassTimer extends Component {
   }
   render() {
     return (
-      <h1>Class Time Minder: "{this.props.name} "</h1>
+      <h1>Class Time Minder: "{this.state.name}"</h1>
     );
   }
 }
