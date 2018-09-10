@@ -36,6 +36,7 @@ h1   { text-align:center; font-weight:normal;}
 #remaining_time {font-size: 160px; font-family: 'Lato', sans-serif; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080; font-variant: small-caps; } 
 #clock { font-family: 'Lato', sans-serif; text-align:center; }
 #name { font-variant:small-caps; }
+#next_period_name { font-variant:small-caps; margin-left: 1em;  }
 #period { font-variant:small-caps; }
 #counter { font-family: 'Lato', sans-serif; font-size: 6em; }
 .center-text { text-align: center; }
