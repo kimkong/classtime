@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 var sprintf = require('sprintf-js').sprintf;
+var dateFormat = require('dateformat');
 
 
 class ClassTimerScheduleSelector extends Component {
   render() {
     return (
-      <div class="panel major">
-        <div class="center-text schedule_selector">
+      <div className="panel major">
+        <div className="center-text schedule_selector">
           <button onClick="setSchedule('default')" type="button">default</button> 
           <button onClick="setSchedule('RallyA')"  type="button">rally a</button> 
           <button onClick="setSchedule('RallyB')"  type="button">rally b</button> 
@@ -24,7 +25,24 @@ class ClassTimerScheduleSelector extends Component {
 
 class AdjustedTime {
   constructor(current_time) {
-    this.now = Date(current_time);
+    // passed in a full date/time?
+    // passed in a short hh:mm time?
+    // pass in a Date object?
+
+    if (typeof(current_time) == undefined || current_time == null) {
+      //console.log("setting current time wih new Date()")
+      this.now = new Date;
+    } else if (typeof(current_time) == "string") {
+      //console.log("parsing current_time and setting:", current_time)
+      let tmp = String(current_time).match(/^(\d+):(\d+)$/);
+      let hours = parseInt(tmp[1], 10);
+      let minutes = parseInt(tmp[2], 10);
+      this.now = new Date(null, null, null, hours, minutes, 0, 0);
+    } else {
+      //console.log("setting with current_time  assusming sane value for now", current_time)
+      this.now = current_time;
+    }
+    console.log("nownow?  ", current_time);
   }
 
   ms_duration_to_human(ms) {
@@ -42,29 +60,42 @@ class AdjustedTime {
   }
 
   calculated_remaining(ending_time_in_hh_mm) {
-    this.now; // in miliseconds since epoch
 
     let ending_time = new Date();
     // TODO: verify input is string in the correct format "HH:MM" otherwise all hell will break loose
     ending_time.setHours(ending_time_in_hh_mm.split(":")[0]);
     ending_time.setMinutes(ending_time_in_hh_mm.split(":")[1]);
     ending_time.setSeconds(0);
+    ending_time = ending_time.getTime();
 
-    if ( this.now > ending_time ) {
+    let now_time = this.now.getDate();
+    console.log("now_time", now_time)
+    console.log("ending_time", ending_time)
+    console.log("now_time <ending_time", now_time < ending_time)
+
+    if ( now_time > ending_time ) {
+      console.log("in the past on line 74");
       return '-past???';
-    } else if (this.now <= ending_time) {
-      let remaining_ms = ending_time - this.now ;
-      return this.ms_duration_to_human(remaining_ms);
+    } else if (now_time <= ending_time) {
+      console.log("in the past on line 74");
+      console.log("line 80: ", ending_time)
+      return this.ms_duration_to_human(ending_time - now_time);
     }
   }
+
   set_adjustment_secs(seconds) {
   }
+
   now() {
+    //not a property.
+  }
+  getDate() {
+    console.log("class AdjustedTime -  getting date from this.now", this.now, this.now.getTime())
+    return this.now.getTime();
   }
 
   to_human() {
-    //this.now
-    return this.now;
+    return dateFormat(this.now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
   }
 
 }
@@ -73,7 +104,7 @@ class ClassPeriod {
   constructor() {
     this.state = {
       current_period_name: 'test schedule 1',
-      current_period_start: '15:05',
+      current_period_start: '12:05',
       current_period_end: '16:55',
       next_period_name: 'test schedule 2',
     }
@@ -85,6 +116,7 @@ class ClassPeriod {
   }
   time_remaining(current_time) {
     let now = new AdjustedTime(current_time)
+    console.log("current_time .now? ", current_time)
     let remaining_time = now.calculated_remaining(this.state.current_period_end);
     return remaining_time;
   }
@@ -114,15 +146,15 @@ class ClassTimerStatusPanel extends Component {
 
   render() {
     return (
-      <div class="panel left">
+      <div className="panel left">
         <div>
-          <div class="timer_info">
+          <div className="timer_info">
             <span id="period_name">{this.state.class_period.name()}</span>
           </div>
-          <div class="timer_countdown">
+          <div className="timer_countdown">
             <span id="remaining_time">{this.state.class_period.time_remaining(this.props.currentTime)}</span>
           </div>
-          <div class="timer_info">
+          <div className="timer_info">
             <span id="period_span">{this.state.class_period.display_period_span()}</span>
             <span id="next_period_name">{this.state.class_period.next_period_name()}</span>
           </div>
@@ -136,16 +168,16 @@ class ClassTimerStatusPanel extends Component {
 class ClassTimerSettingsPanel extends Component {
   render() {
     return (
-      <div class="panel right">
-        <div class="timer_settings">CURRENT TIME  <span id="clock">&nbsp;</span></div> 
-        <div class="timer_settings">SETTINGS:</div> 
+      <div className="panel right">
+        <div className="timer_settings">CURRENT TIME  <span id="clock">&nbsp;</span></div> 
+        <div className="timer_settings">SETTINGS:</div> 
         <div>
           <input type="radio" id="contactChoice1" onClick="setScheduleType('MS')" name="contact" value="MS"/>
           <label for="contactChoice1">Middle School</label>
           <input type="radio" id="contactChoice2" onClick="setScheduleType('HS')" name="contact" value="HS" checked/>
           <label for="contactChoice2">High School</label>
         </div>
-        <div class="center-text"><span id="counter">00:00</span></div>
+        <div className="center-text"><span id="counter">00:00</span></div>
       </div>
     )
   }
@@ -154,13 +186,14 @@ class ClassTimerSettingsPanel extends Component {
 class ClassTimer extends Component {
   constructor(props) {
     super(props);
+    console.log("ClassTimer: ", this.props.currentTime);
   }
   render() {
     return (
       <div>
         <h1>Class Time Minder: "{this.props.teacherName}"</h1>
         <ClassTimerStatusPanel currentTime={this.props.currentTime} />
-        xxx{this.props.currentTime.to_human()}xxx
+        {this.props.currentTime.to_human()}
         <ClassTimerSettingsPanel />
       </div>
     );
@@ -174,27 +207,22 @@ class App extends Component {
     this.state = {
       currentTime: new AdjustedTime()
     };
+    console.log("App: ", this.state.currentTime);
   }
  
   // https://stackoverflow.com/questions/39426083/update-component-every-second-react
-  // TICK does not function. 
-  // what is tick?
-  // it is an animal that sucks your time and life away
-  // 
-  tick() {
-    this.setState(prevState => ({
-      currentTime: prevState.currentTime
-    }));
-  }
-
   componentDidMount() {
-    this.interval = setInterval(() => this.tick(), 1000);
+    this.intervalID = setInterval( () => this.tick() , 1000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    clearInterval(this.intervalID);
   }
 
+  tick() {
+    this.setState({ currentTime: new AdjustedTime() });
+    console.log("App: ", this.state.currentTime);
+  }
 
   render() {
     return (
@@ -229,3 +257,10 @@ export default App;
 // schedule needs a state, county, school attribute for cluster of schedules.
 // school specific. so other attributes to make it faster to find.
 //
+//
+//
+//
+
+
+
+
