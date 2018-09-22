@@ -7,8 +7,8 @@ var sprintf = require('sprintf-js').sprintf;
 class ClassTimerScheduleSelector extends Component {
   render() {
     return (
-      <div class="panel" style={{"width":"100%", height:"100%"}}>
-        <div style={{"text-align": "center", "font-size": "1.5em"}}>
+      <div class="panel major">
+        <div class="center-text schedule_selector">
           <button onClick="setSchedule('default')" type="button">default</button> 
           <button onClick="setSchedule('RallyA')"  type="button">rally a</button> 
           <button onClick="setSchedule('RallyB')"  type="button">rally b</button> 
@@ -114,15 +114,15 @@ class ClassTimerStatusPanel extends Component {
 
   render() {
     return (
-      <div class="panel" style={{"width":"70%"}}>
+      <div class="panel left">
         <div>
-          <div style={{"text-align": "center", "font-size": "1.5em", "margin-top": "1em"}}>
+          <div class="timer_info">
             <span id="period_name">{this.state.class_period.name()}</span>
           </div>
-          <div style={{"text-align": "center", "font-size": "4em"}}>
+          <div class="timer_countdown">
             <span id="remaining_time">{this.state.class_period.time_remaining(this.props.currentTime)}</span>
           </div>
-          <div style={{"text-align": "center", "font-size": "1.5em", "margin-top": "1em"}}>
+          <div class="timer_info">
             <span id="period_span">{this.state.class_period.display_period_span()}</span>
             <span id="next_period_name">{this.state.class_period.next_period_name()}</span>
           </div>
@@ -136,16 +136,16 @@ class ClassTimerStatusPanel extends Component {
 class ClassTimerSettingsPanel extends Component {
   render() {
     return (
-      <div class="panel" style={{"width":"30%"}}>
-        <div style={{"font-size": "1.25em", "font-variant": "small-caps", color:"#666"}}>CURRENT TIME  <span id="clock">&nbsp;</span></div> 
-        <div style={{"font-size": "1.25em", "font-variant": "small-caps", color:"#666"}}>SETTINGS:</div> 
+      <div class="panel right">
+        <div class="timer_settings">CURRENT TIME  <span id="clock">&nbsp;</span></div> 
+        <div class="timer_settings">SETTINGS:</div> 
         <div>
           <input type="radio" id="contactChoice1" onClick="setScheduleType('MS')" name="contact" value="MS"/>
           <label for="contactChoice1">Middle School</label>
           <input type="radio" id="contactChoice2" onClick="setScheduleType('HS')" name="contact" value="HS" checked/>
           <label for="contactChoice2">High School</label>
         </div>
-        <div class="center-text" style={{"text-align": "center", height: "6em"}}><span id="counter">00:00</span></div>
+        <div class="center-text"><span id="counter">00:00</span></div>
       </div>
     )
   }
