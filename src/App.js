@@ -1,8 +1,127 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 var sprintf = require('sprintf-js').sprintf;
 var dateFormat = require('dateformat');
+
+
+// schedule
+// 
+// schedule name:  monday schedule
+// schedule dow: []
+// schedule type:  MS HS
+// //schedule times: 8:00, 15:06 - redundant take the lowest start and the highest end
+// 
+// period name: 1st period
+// period times: 8:00, null
+// period name: passing to 2nd period
+// period start_time: 8:55, 8:59
+// 
+// period name: 2nd
+// period times: 9:00, null
+// period name: passing to 2nd period
+// period start_time: 8:55, null
+// 
+// [....]
+// 
+// period name: 6nd
+// period times: 14:10, 15:06
+//
+//
+// mon MS HS
+// tue-fri MS HS
+// 5 special schedules
+
+class Period {
+  constructor(name, start_time) {
+    this.name = name;
+    this.start_time = start_time;
+  }
+}
+class DailySchedule {
+  constructor(options) {
+    if (options == undefined) options = {};
+    if (options.name === undefined) { console.log("ERROR: name is required"); }
+    this.name = options.name;
+    this.dow = options.dow || []
+    this.type = options.type;
+    this.periods = options.periods;
+
+    // this.name = "Regular Day MS";
+    // this.dow = [2,3,4,5,6,0]; // leaving blank implies special schedule
+    // this.type = "MS";
+
+    // this.periods =  [
+    //   new Period('Period 0 (Optional)',	'6:44'),
+    //   new Period('Passing to Period 1',	'7:54'),
+    //   new Period('Period 1',					  '8:00'),
+    //   new Period('Passing to Period 2',	'8:58'),
+    //   new Period('Period 2',						'9:04'),
+    //   new Period('Snack',								'10:10'),
+    //   new Period('Passing to Period 3',	'10:19'),
+    //   new Period('Period 3',						'10:25'),
+    //   new Period('Lunch (7-8)',					'11:23'),
+    //   new Period('Passing (7-8)',				'11:54'),
+    //   new Period('Period 4 (7-8)',			'12:00'),
+    //   new Period('Passing to Period 5',	'12:58'),
+    //   new Period('Period 5',						'13:04'),
+    //   new Period('Passing to Period 6',	'14:02'),
+    //   new Period('Period 6',						'14:08'),
+    //   new Period('Period 6 End',				'15:06')
+    // ]
+  }
+
+  name() { return this.name; }
+  loadSchedule(server, scheduleId) {
+    // get from server
+  }
+}
+
+
+
+let schedule = [{
+	name: "Regular Day MS",
+	dow: [2,3,4,5,6,0],
+	type: "MS",
+	periods: [
+		{ name: 'Period 0 (Optional)',	start_time: '6:44'},
+		{ name: 'Passing to Period 1',	start_time: '7:54'},
+		{ name: 'Period 1',							start_time: '8:00'},
+		{ name: 'Passing to Period 2',	start_time: '8:58'},
+		{ name: 'Period 2',							start_time: '9:04'},
+		{ name: 'Snack',								start_time: '10:10'},
+		{ name: 'Passing to Period 3',	start_time: '10:19'},
+		{ name: 'Period 3',							start_time: '10:25'},
+		{ name: 'Lunch (7-8)',					start_time: '11:23'},
+		{ name: 'Passing (7-8)',				start_time: '11:54'},
+		{ name: 'Period 4 (7-8)',				start_time: '12:00'},
+		{ name: 'Passing to Period 5',	start_time: '12:58'},
+		{ name: 'Period 5',							start_time: '13:04'},
+		{ name: 'Passing to Period 6',	start_time: '14:02'},
+		{ name: 'Period 6',							start_time: '14:08'}
+	]
+},
+{
+	name: "Regular Day HS",
+	dow: [2,3,4,5,6,0],
+	type: "HS",
+	periods: [
+		{ name: 'Period 0 (Optional)',	start_time: '6:44'},
+		{ name: 'Passing to Period 1',	start_time: '7:54'},
+		{ name: 'Period 1',							start_time: '8:00'},
+		{ name: 'Passing to Period 2',	start_time: '8:58'},
+		{ name: 'Period 2',							start_time: '9:04'},
+		{ name: 'Snack',								start_time: '10:10'},
+		{ name: 'Passing to Period 3',	start_time: '10:19'},
+		{ name: 'Period 3',							start_time: '10:25'},
+		{ name: 'Passing (9-12)',				start_time: '11:23'},
+		{ name: 'Period 4 (9-12)',			start_time: '11:29'},
+		{ name: 'Lunch (9-12)',					start_time: '12:27'},
+		{ name: 'Passing to Period 5',	start_time: '12:58'},
+		{ name: 'Period 5',							start_time: '13:04'},
+		{ name: 'Passing to Period 6',	start_time: '14:02'},
+		{ name: 'Period 6',							start_time: '14:08'}
+	]
+}]
 
 
 class ClassTimerScheduleSelector extends Component {
@@ -29,10 +148,10 @@ class AdjustedTime {
     // passed in a short hh:mm time?
     // pass in a Date object?
 
-    if (typeof(current_time) == undefined || current_time == null) {
+    if (current_time === undefined || current_time === null) {
       //console.log("setting current time wih new Date()")
-      this.now = new Date;
-    } else if (typeof(current_time) == "string") {
+      this.now = new Date();
+    } else if (typeof(current_time) === "string") {
       //console.log("parsing current_time and setting:", current_time)
       let tmp = String(current_time).match(/^(\d+):(\d+)$/);
       let hours = parseInt(tmp[1], 10);
@@ -51,7 +170,7 @@ class AdjustedTime {
     let mins = Math.floor((sec_remaining - hrs * 3600) / 60);
     let secs = Math.floor(sec_remaining - (hrs*3600 + mins*60) );
     let time_remaining_str;
-    if (hrs==0) {
+    if (hrs === 0) {
       time_remaining_str = sprintf("%02d:%02d", mins, secs);
     } else {
       time_remaining_str = sprintf("%02d:%02d:%02d", hrs, mins, secs);
@@ -74,6 +193,7 @@ class AdjustedTime {
     console.log("now_time <ending_time", now_time < ending_time)
 
     if ( now_time > ending_time ) {
+      // should only occur at the end of the day. or never if it counts to the next day
       console.log("in the past on line 74");
       return '-past???';
     } else if (now_time <= ending_time) {
@@ -105,7 +225,7 @@ class ClassPeriod {
     this.state = {
       current_period_name: 'test schedule 1',
       current_period_start: '12:05',
-      current_period_end: '16:55',
+      current_period_end: '3:55',
       next_period_name: 'test schedule 2',
     }
     //this.state.current_period_end = Date.now();
@@ -137,19 +257,21 @@ class ClassPeriod {
 class ClassTimerStatusPanel extends Component {
   constructor(props) {
     super(props);
-    //this.props.currentTime
+    console.log( "wtf", this.props.current_schedule);
+
     let class_period = new ClassPeriod();
     this.state = {
       class_period: class_period
     };
   }
 
+
   render() {
     return (
       <div className="panel left">
         <div>
           <div className="timer_info">
-            <span id="period_name">{this.state.class_period.name()}</span>
+            <span id="period_name">{this.props.current_schedule}</span>
           </div>
           <div className="timer_countdown">
             <span id="remaining_time">{this.state.class_period.time_remaining(this.props.currentTime)}</span>
@@ -168,7 +290,7 @@ class ClassTimerStatusPanel extends Component {
 class ClassTimerSettingsPanel extends Component {
   render() {
     return (
-      <div className="panel right">
+      <div>
         <div className="timer_settings">CURRENT TIME  <span id="clock">&nbsp;</span></div> 
         <div className="timer_settings">SETTINGS:</div> 
         <div>
@@ -183,7 +305,8 @@ class ClassTimerSettingsPanel extends Component {
   }
 }
 
-class ClassTimer extends Component {
+
+class ClassTime extends Component {
   constructor(props) {
     super(props);
     console.log("ClassTimer: ", this.props.currentTime);
@@ -191,28 +314,59 @@ class ClassTimer extends Component {
   render() {
     return (
       <div>
-        <h1>Class Time Minder: "{this.props.teacherName}"</h1>
         <ClassTimerStatusPanel currentTime={this.props.currentTime} />
         {this.props.currentTime.to_human()}
-        <ClassTimerSettingsPanel />
       </div>
     );
   }
 }
 //  https://hackernoon.com/understanding-state-and-props-in-react-94bc09232b9c
 
+class Account {
+  // teacher name
+  // school/district
+  // internal account id
+  //  ---> lookup to get schedules for account
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
+
+    
+
+    // app needs to manage all schedules
+    let all_schedules = [
+    ]
+    // later use `new DailySchedule().loadSchedule`
+    let a_schedule = new DailySchedule({name:"ffff",
+                                       dow:[1,2,3,4,5,6,0],
+                                       type:"sdfasf",
+                                       periods:[
+                                         new Period({name:"first",start_time:"12:22"}),
+                                         new Period({name:"ending_time",start_time:"15:06"}),
+                                       ]
+                                       }
+                                      )
+    all_schedules.push(a_schedule)
     this.state = {
-      currentTime: new AdjustedTime()
+      currentTime: new AdjustedTime(),
+      teacherName: "KimKong",
+      all_schedules: all_schedules,
+      current_schedule: a_schedule,
     };
+
+    console.log("a_schedule:", a_schedule);
+    console.log("a_schedule.name:", a_schedule.name);
+    console.log("a_schedule.name():", a_schedule.name());
+    console.log("App. constructor   current_schedule: ", this.state.current_schedule);
+
     console.log("App: ", this.state.currentTime);
   }
  
   // https://stackoverflow.com/questions/39426083/update-component-every-second-react
   componentDidMount() {
-    this.intervalID = setInterval( () => this.tick() , 1000);
+    //this.intervalID = setInterval( () => this.tick() , 1000);
   }
 
   componentWillUnmount() {
@@ -228,7 +382,15 @@ class App extends Component {
     return (
       <div>
         <div className="App">
-          <ClassTimer teacherName="Mr. Kim" currentTime={this.state.currentTime} />
+          <h1>Class Time Minder: "{this.state.teacherName}"</h1>
+          // schedule for the day
+          // countdown info
+          <ClassTimerStatusPanel current_schedule={this.state.current_schedule} />
+          <div className="panel right">
+          <ClassTime currentTime={this.state.currentTime} />
+          <ClassTimerSettingsPanel />
+          </div>
+          // timer
         </div>
       </div>
     );
