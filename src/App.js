@@ -215,24 +215,11 @@ class AdjustedTime {
   }
 
   calculated_remaining(ending_time_in_hh_mm) {
-    let ending_time = new Date();
-    // TODO: verify input is string in the correct format "HH:MM" otherwise all hell will break loose
-    ending_time.setHours(ending_time_in_hh_mm.split(":")[0]);
-    ending_time.setMinutes(ending_time_in_hh_mm.split(":")[1]);
-    ending_time.setSeconds(0);
-    ending_time = ending_time.getTime();
-
+    let ending_time = new AdjustedTime(ending_time_in_hh_mm);
     let now_time = this.now.getDate();
+    debugger
 
-    if ( now_time > ending_time ) {
-      // should only occur at the end of the day. or never if it counts to the next day
-      //console.log("in the past on line 74");
-      return '-past???';
-    } else if (now_time <= ending_time) {
-      //console.log("in the past on line 74");
-      //console.log("line 80: ", ending_time)
-      return this.ms_duration_to_human(ending_time - now_time);
-    }
+    return this.ms_duration_to_human(ending_time - now_time);
   }
 
   set_adjustment_secs(seconds) {
@@ -266,14 +253,20 @@ class ClassPeriod {
 
   get current_period_start() {
     let period = this.current_period();
-    return period.current_period.toAdjustedTime().hhss;
+    if (period.in_active_period) {
+      return period.current_period.toAdjustedTime().hhss;
+    }
+    return "----";
   }
   get current_period_end() {
     let period = this.current_period();
-    if (period.next_period) {
-      return period.next_period.toAdjustedTime().hhss;
+    if (period.in_active_period) {
+      if (period.next_period) {
+        return period.next_period.toAdjustedTime().hhss;
+      }
+      return "XXXX";
     }
-    return "XXXX";
+    return "----";
   }
   get next_period_name() {
     //return this.next_period_name()
@@ -406,7 +399,7 @@ class App extends Component {
                        type:"sdfasf",
                        periods:[
                          new Period({name:"first",start_time:"12:22"}),
-                         new Period({name:"ending_time",start_time:"16:06"}),
+                         new Period({name:"ending_time",start_time:"17:06"}),
                        ]
                      }
     all_schedules.push(a_schedule)
