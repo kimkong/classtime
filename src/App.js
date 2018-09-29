@@ -1,7 +1,7 @@
 // 2 click onto settings control (need framework for visuals)
 // 3 make schedules for first run a static property of the classtimer
 // 4 buttons for classtimer generated according to data structure
-// 5 
+// 5
 //
 //
 // schedule name: default mon
@@ -32,24 +32,24 @@ var dateFormat = require('dateformat');
 
 
 // schedule
-// 
+//
 // schedule name:  monday schedule
 // schedule dow: []
 // schedule type:  MS HS
 // //schedule times: 8:00, 15:06 - redundant take the lowest start and the highest end
-// 
+//
 // period name: 1st period
 // period times: 8:00, null
 // period name: passing to 2nd period
 // period start_time: 8:55, 8:59
-// 
+//
 // period name: 2nd
 // period times: 9:00, null
 // period name: passing to 2nd period
 // period start_time: 8:55, null
-// 
+//
 // [....]
-// 
+//
 // period name: 6nd
 // period times: 14:10, 15:06
 //
@@ -85,22 +85,22 @@ class DailySchedule {
     // this.type = "MS";
 
     // this.periods =  [
-    //   new Period('Period 0 (Optional)',	'6:44'),
-    //   new Period('Passing to Period 1',	'7:54'),
-    //   new Period('Period 1',					  '8:00'),
-    //   new Period('Passing to Period 2',	'8:58'),
-    //   new Period('Period 2',						'9:04'),
-    //   new Period('Snack',								'10:10'),
-    //   new Period('Passing to Period 3',	'10:19'),
-    //   new Period('Period 3',						'10:25'),
-    //   new Period('Lunch (7-8)',					'11:23'),
-    //   new Period('Passing (7-8)',				'11:54'),
-    //   new Period('Period 4 (7-8)',			'12:00'),
-    //   new Period('Passing to Period 5',	'12:58'),
-    //   new Period('Period 5',						'13:04'),
-    //   new Period('Passing to Period 6',	'14:02'),
-    //   new Period('Period 6',						'14:08'),
-    //   new Period('Period 6 End',				'15:06')
+    //   new Period('Period 0 (Optional)',  '6:44'),
+    //   new Period('Passing to Period 1',  '7:54'),
+    //   new Period('Period 1',            '8:00'),
+    //   new Period('Passing to Period 2',  '8:58'),
+    //   new Period('Period 2',            '9:04'),
+    //   new Period('Snack',                '10:10'),
+    //   new Period('Passing to Period 3',  '10:19'),
+    //   new Period('Period 3',            '10:25'),
+    //   new Period('Lunch (7-8)',          '11:23'),
+    //   new Period('Passing (7-8)',        '11:54'),
+    //   new Period('Period 4 (7-8)',      '12:00'),
+    //   new Period('Passing to Period 5',  '12:58'),
+    //   new Period('Period 5',            '13:04'),
+    //   new Period('Passing to Period 6',  '14:02'),
+    //   new Period('Period 6',            '14:08'),
+    //   new Period('Period 6 End',        '15:06')
     // ]
   }
 
@@ -113,48 +113,48 @@ class DailySchedule {
 
 
 let schedule = [{
-	name: "Regular Day MS",
-	dow: [2,3,4,5,6,0],
-	type: "MS",
-	periods: [
-		{ name: 'Period 0 (Optional)',	start_time: '6:44'},
-		{ name: 'Passing to Period 1',	start_time: '7:54'},
-		{ name: 'Period 1',							start_time: '8:00'},
-		{ name: 'Passing to Period 2',	start_time: '8:58'},
-		{ name: 'Period 2',							start_time: '9:04'},
-		{ name: 'Snack',								start_time: '10:10'},
-		{ name: 'Passing to Period 3',	start_time: '10:19'},
-		{ name: 'Period 3',							start_time: '10:25'},
-		{ name: 'Lunch (7-8)',					start_time: '11:23'},
-		{ name: 'Passing (7-8)',				start_time: '11:54'},
-		{ name: 'Period 4 (7-8)',				start_time: '12:00'},
-		{ name: 'Passing to Period 5',	start_time: '12:58'},
-		{ name: 'Period 5',							start_time: '13:04'},
-		{ name: 'Passing to Period 6',	start_time: '14:02'},
-		{ name: 'Period 6',							start_time: '14:08'}
-	]
+  name: "Regular Day MS",
+  dow: [2,3,4,5,6,0],
+  type: "MS",
+  periods: [
+    { name: 'Period 0 (Optional)',  start_time: '6:44'},
+    { name: 'Passing to Period 1',  start_time: '7:54'},
+    { name: 'Period 1',              start_time: '8:00'},
+    { name: 'Passing to Period 2',  start_time: '8:58'},
+    { name: 'Period 2',              start_time: '9:04'},
+    { name: 'Snack',                start_time: '10:10'},
+    { name: 'Passing to Period 3',  start_time: '10:19'},
+    { name: 'Period 3',              start_time: '10:25'},
+    { name: 'Lunch (7-8)',          start_time: '11:23'},
+    { name: 'Passing (7-8)',        start_time: '11:54'},
+    { name: 'Period 4 (7-8)',        start_time: '12:00'},
+    { name: 'Passing to Period 5',  start_time: '12:58'},
+    { name: 'Period 5',              start_time: '13:04'},
+    { name: 'Passing to Period 6',  start_time: '14:02'},
+    { name: 'Period 6',              start_time: '14:08'}
+  ]
 },
 {
-	name: "Regular Day HS",
-	dow: [2,3,4,5,6,0],
-	type: "HS",
-	periods: [
-		{ name: 'Period 0 (Optional)',	start_time: '6:44'},
-		{ name: 'Passing to Period 1',	start_time: '7:54'},
-		{ name: 'Period 1',							start_time: '8:00'},
-		{ name: 'Passing to Period 2',	start_time: '8:58'},
-		{ name: 'Period 2',							start_time: '9:04'},
-		{ name: 'Snack',								start_time: '10:10'},
-		{ name: 'Passing to Period 3',	start_time: '10:19'},
-		{ name: 'Period 3',							start_time: '10:25'},
-		{ name: 'Passing (9-12)',				start_time: '11:23'},
-		{ name: 'Period 4 (9-12)',			start_time: '11:29'},
-		{ name: 'Lunch (9-12)',					start_time: '12:27'},
-		{ name: 'Passing to Period 5',	start_time: '12:58'},
-		{ name: 'Period 5',							start_time: '13:04'},
-		{ name: 'Passing to Period 6',	start_time: '14:02'},
-		{ name: 'Period 6',							start_time: '14:08'}
-	]
+  name: "Regular Day HS",
+  dow: [2,3,4,5,6,0],
+  type: "HS",
+  periods: [
+    { name: 'Period 0 (Optional)',  start_time: '6:44'},
+    { name: 'Passing to Period 1',  start_time: '7:54'},
+    { name: 'Period 1',              start_time: '8:00'},
+    { name: 'Passing to Period 2',  start_time: '8:58'},
+    { name: 'Period 2',              start_time: '9:04'},
+    { name: 'Snack',                start_time: '10:10'},
+    { name: 'Passing to Period 3',  start_time: '10:19'},
+    { name: 'Period 3',              start_time: '10:25'},
+    { name: 'Passing (9-12)',        start_time: '11:23'},
+    { name: 'Period 4 (9-12)',      start_time: '11:29'},
+    { name: 'Lunch (9-12)',          start_time: '12:27'},
+    { name: 'Passing to Period 5',  start_time: '12:58'},
+    { name: 'Period 5',              start_time: '13:04'},
+    { name: 'Passing to Period 6',  start_time: '14:02'},
+    { name: 'Period 6',              start_time: '14:08'}
+  ]
 }]
 
 
@@ -163,13 +163,13 @@ class ClassTimerScheduleSelector extends Component {
     return (
       <div className="panel major">
         <div className="center-text schedule_selector">
-          <button onClick="setSchedule('default')" type="button">default</button> 
-          <button onClick="setSchedule('RallyA')"  type="button">rally a</button> 
-          <button onClick="setSchedule('RallyB')"  type="button">rally b</button> 
-          <button onClick="setSchedule('Block')"   type="button">block</button> 
-          <button onClick="setSchedule('Finals')"  type="button">finals</button> 
-          <button onClick="setSchedule('Minimum')" type="button">minimum</button> 
-          <button onClick="setSchedule('Test')"    type="button">test</button> 
+          <button onClick="setSchedule('default')" type="button">default</button>
+          <button onClick="setSchedule('RallyA')"  type="button">rally a</button>
+          <button onClick="setSchedule('RallyB')"  type="button">rally b</button>
+          <button onClick="setSchedule('Block')"   type="button">block</button>
+          <button onClick="setSchedule('Finals')"  type="button">finals</button>
+          <button onClick="setSchedule('Minimum')" type="button">minimum</button>
+          <button onClick="setSchedule('Test')"    type="button">test</button>
         </div>
       </div>
     )
@@ -349,8 +349,8 @@ class ClassTimerSettingsPanel extends Component {
   render() {
     return (
       <div>
-        <div className="timer_settings">CURRENT TIME  <span id="clock">&nbsp;</span></div> 
-        <div className="timer_settings">SETTINGS:</div> 
+        <div className="timer_settings">CURRENT TIME  <span id="clock">&nbsp;</span></div>
+        <div className="timer_settings">SETTINGS:</div>
         <div>
           <input type="radio" id="contactChoice1" onClick="setScheduleType('MS')" name="contact" value="MS"/>
           <label for="contactChoice1">Middle School</label>
@@ -394,14 +394,29 @@ class App extends Component {
     let all_schedules = [
     ]
     // later use `new DailySchedule().loadSchedule`
+    let hour_offset = 8;
     let a_schedule = { name:"Sample test Schedule 1",
                        dow:[1,2,3,4,5,6,0],
                        type:"sdfasf",
                        periods:[
-                         new Period({name:"first",start_time:"12:22"}),
-                         new Period({name:"ending_time",start_time:"17:06"}),
+                        new Period({ name: 'Period 0 (Optional)',    start_time: (6+hour_offset+':44' )}),
+                         new Period({ name: 'Passing to Period 1',    start_time: (7+hour_offset+':54' )}),
+                         new Period({ name: 'Period 1',              start_time: (8+hour_offset+':00' )}),
+                         new Period({ name: 'Passing to Period 2',    start_time: (8+hour_offset+':58' )}),
+                         new Period({ name: 'Period 2',              start_time: (9+hour_offset+':04' )}),
+                         new Period({ name: 'Snack',                  start_time: (10+hour_offset+':10')}),
+                         new Period({ name: 'Passing to Period 3',    start_time: (10+hour_offset+':19')}),
+                         new Period({ name: 'Period 3',              start_time: (10+hour_offset+':25')}),
+                         new Period({ name: 'Lunch (7-8)',            start_time: (11+hour_offset+':23')}),
+                         new Period({ name: 'Passing (7-8)',          start_time: (11+hour_offset+':54')}),
+                         new Period({ name: 'Period 4 (7-8)',        start_time: (12+hour_offset+':00')}),
+                         new Period({ name: 'Passing to Period 5',   start_time: (12+hour_offset+':58')}),
+                         new Period({ name: 'Period 5',              start_time: (13+hour_offset+':04')}),
+                         new Period({ name: 'Passing to Period 6',    start_time: (14+hour_offset+':02')}),
+                         new Period({ name: 'Period 6',              start_time: (14+hour_offset+':08')})
                        ]
                      }
+    console.log(a_schedule)
     all_schedules.push(a_schedule)
     this.state = {
       currentTime: new AdjustedTime(),
@@ -410,7 +425,7 @@ class App extends Component {
       current_schedule: a_schedule,
     };
   }
- 
+
   // https://stackoverflow.com/questions/39426083/update-component-every-second-react
   componentDidMount() {
     //this.intervalID = setInterval( () => this.tick() , 1000);
@@ -438,4 +453,3 @@ class App extends Component {
 }
 
 export default App;
-
