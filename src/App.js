@@ -1,3 +1,30 @@
+// 2 click onto settings control (need framework for visuals)
+// 3 make schedules for first run a static property of the classtimer
+// 4 buttons for classtimer generated according to data structure
+// 5 
+//
+//
+// schedule name: default mon
+// schedule sub-type: MS HS for me. for others lunch A lunch B or something I haven't seen some won't have subtypes at all
+// periods: name, start_time and end time implied by next row
+//
+//
+// Eddy specific. How to introduce actual time offset vs puter time.
+//
+// Timer only change would be to add arbitrary # of minutes into timer. and have beeping a setting to turn on/off
+// complexity is to make settings definable entirely within the page. save and set and reload.
+// webstorage. to have this offline.
+// maybe have online version so i can charge ppl money or show ads so i can money
+// schedule needs a state, county, school attribute for cluster of schedules.
+// school specific. so other attributes to make it faster to find.
+//
+//
+//
+//
+
+
+
+
 import React, { Component } from 'react';
 import './App.css';
 var sprintf = require('sprintf-js').sprintf;
@@ -32,11 +59,18 @@ var dateFormat = require('dateformat');
 // 5 special schedules
 
 class Period {
-  constructor(name, start_time) {
-    this.name = name;
-    this.start_time = start_time;
+  constructor(data) {
+    this.name = data.name;
+    this.start_time = data.start_time;
+  }
+  toAdjustedTime() {
+    return new AdjustedTime( this.start_time );
+  }
+  start_epoch() {
+    return this.toAdjustedTime().getTime();
   }
 }
+
 class DailySchedule {
   constructor(options) {
     if (options == undefined) options = {};
@@ -156,12 +190,14 @@ class AdjustedTime {
       let tmp = String(current_time).match(/^(\d+):(\d+)$/);
       let hours = parseInt(tmp[1], 10);
       let minutes = parseInt(tmp[2], 10);
-      this.now = new Date(null, null, null, hours, minutes, 0, 0);
+      let tmp_now = new Date()
+      let [year, month, day] = [tmp_now.getFullYear(), tmp_now.getMonth(), tmp_now.getDate()];
+      this.now = new Date(year, month, day, hours, minutes, 0, 0);
     } else {
       //console.log("setting with current_time  assusming sane value for now", current_time)
       this.now = current_time;
     }
-    console.log("nownow?  ", current_time);
+    //console.log("nownow?  ", current_time);
   }
 
   ms_duration_to_human(ms) {
@@ -179,7 +215,6 @@ class AdjustedTime {
   }
 
   calculated_remaining(ending_time_in_hh_mm) {
-
     let ending_time = new Date();
     // TODO: verify input is string in the correct format "HH:MM" otherwise all hell will break loose
     ending_time.setHours(ending_time_in_hh_mm.split(":")[0]);
@@ -188,17 +223,14 @@ class AdjustedTime {
     ending_time = ending_time.getTime();
 
     let now_time = this.now.getDate();
-    console.log("now_time", now_time)
-    console.log("ending_time", ending_time)
-    console.log("now_time <ending_time", now_time < ending_time)
 
     if ( now_time > ending_time ) {
       // should only occur at the end of the day. or never if it counts to the next day
-      console.log("in the past on line 74");
+      //console.log("in the past on line 74");
       return '-past???';
     } else if (now_time <= ending_time) {
-      console.log("in the past on line 74");
-      console.log("line 80: ", ending_time)
+      //console.log("in the past on line 74");
+      //console.log("line 80: ", ending_time)
       return this.ms_duration_to_human(ending_time - now_time);
     }
   }
@@ -209,76 +241,109 @@ class AdjustedTime {
   now() {
     //not a property.
   }
-  getDate() {
-    console.log("class AdjustedTime -  getting date from this.now", this.now, this.now.getTime())
+
+  getTime() {
+    //console.log("class AdjustedTime -  getting date from this.now", this.now, this.now.getTime())
     return this.now.getTime();
   }
 
   to_human() {
     return dateFormat(this.now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
   }
+  get hhss() {
+    return dateFormat(this.now, "h:MM");
+  }
 
 }
 
 class ClassPeriod {
-  constructor() {
-    this.state = {
-      current_period_name: 'test schedule 1',
-      current_period_start: '12:05',
-      current_period_end: '3:55',
-      next_period_name: 'test schedule 2',
-    }
+  constructor(schedule) {
+    this.schedule = schedule;
     //this.state.current_period_end = Date.now();
     //this.state.current_period_end = this.state.current_period_end + (5  * 60 * 1000);
   }
-  name() {
-    return this.state.current_period_name;
+  get name() { return this.schedule.name; }
+
+  get current_period_start() {
+    let period = this.current_period();
+    return period.current_period.toAdjustedTime().hhss;
   }
+  get current_period_end() {
+    let period = this.current_period();
+    if (period.next_period) {
+      return period.next_period.toAdjustedTime().hhss;
+    }
+    return "XXXX";
+  }
+  get next_period_name() {
+    //return this.next_period_name()
+  }
+
+  current_period() {
+    let now = new AdjustedTime().getTime();
+    let is_before_first = now < this.schedule.periods[0].start_epoch();
+
+    if (is_before_first) {
+      return { in_active_period: false, msg: "Class not started yet" };
+    }
+
+    let past_last_period = now > this.schedule.periods[this.schedule.periods.length - 1].start_epoch();
+    if (past_last_period) {
+      return { in_active_period: false, msg: "no more periods, go home" };
+    }
+
+    for (let i = 0; i < this.schedule.periods.length; i++ ) {
+      let after_start = now >= this.schedule.periods[i].start_epoch()
+      let before_next = now < this.schedule.periods[i+1].start_epoch()
+      let in_current_period = after_start && before_next;
+      if (in_current_period) {
+        let next_period = this.schedule.periods[i+1];
+        return { in_active_period: true, period_index: i, current_period: this.schedule.periods[i], next_period: next_period };
+      }
+    }
+    throw "Internal error, should not get here";
+  }
+
   time_remaining(current_time) {
     let now = new AdjustedTime(current_time)
-    console.log("current_time .now? ", current_time)
-    let remaining_time = now.calculated_remaining(this.state.current_period_end);
-    return remaining_time;
+    //console.log("current_time .now? ", current_time)
+    //let remaining_time = now.calculated_remaining(this.state.current_period_end);
+    //return remaining_time;
   }
   display_period_span() {
-    let start_time = this.state.current_period_start;
-    let end_time = this.state.current_period_end;
+    let start_time = this.current_period_start;
+    let end_time = this.current_period_end;
     /// could translate from 24 to 12 hour time.
     return `${start_time} => ${end_time}`;
-  }
-  period_name() {
-    return this.state.current_period_name;
-  }
-  next_period_name() {
-    return this.state.next_period_name;
   }
 }
 
 class ClassTimerStatusPanel extends Component {
   constructor(props) {
     super(props);
-    console.log( "wtf", this.props.current_schedule);
 
-    let class_period = new ClassPeriod();
+    let class_period = new ClassPeriod(props.current_schedule);
     this.state = {
-      class_period: class_period
+      class_period: class_period,
+      current_schedule_name: class_period.name,
+      time_remaining_string: class_period.time_remaining(this.props.currentTime),
+      period_span: class_period.display_period_span(),
+      next_period_name: class_period.next_period_name,
     };
   }
-
-
   render() {
     return (
       <div className="panel left">
         <div>
           <div className="timer_info">
-            <span id="period_name">{this.props.current_schedule}</span>
+            <span id="period_name">{this.state.current_schedule_name}</span>
           </div>
           <div className="timer_countdown">
-            <span id="remaining_time">{this.state.class_period.time_remaining(this.props.currentTime)}</span>
+            <span id="remaining_time">{this.state.time_remaining_string}</span>
           </div>
           <div className="timer_info">
-            <span id="period_span">{this.state.class_period.display_period_span()}</span>
-            <span id="next_period_name">{this.state.class_period.next_period_name()}</span>
+            <span id="period_span">{this.state.period_span}</span>
+            <span id="next_period_name">{this.state.next_period_name}</span>
           </div>
         </div>
         <ClassTimerScheduleSelector />
@@ -309,12 +374,12 @@ class ClassTimerSettingsPanel extends Component {
 class ClassTime extends Component {
   constructor(props) {
     super(props);
-    console.log("ClassTimer: ", this.props.currentTime);
+    //console.log("ClassTimer: ", this.props);
   }
   render() {
+    //<ClassTimerStatusPanel currentTime={this.props.currentTime} current_schedule={this.props.current_schedule} />
     return (
       <div>
-        <ClassTimerStatusPanel currentTime={this.props.currentTime} />
         {this.props.currentTime.to_human()}
       </div>
     );
@@ -332,22 +397,18 @@ class Account {
 class App extends Component {
   constructor(props) {
     super(props);
-
-    
-
     // app needs to manage all schedules
     let all_schedules = [
     ]
     // later use `new DailySchedule().loadSchedule`
-    let a_schedule = new DailySchedule({name:"ffff",
-                                       dow:[1,2,3,4,5,6,0],
-                                       type:"sdfasf",
-                                       periods:[
-                                         new Period({name:"first",start_time:"12:22"}),
-                                         new Period({name:"ending_time",start_time:"15:06"}),
-                                       ]
-                                       }
-                                      )
+    let a_schedule = { name:"Sample test Schedule 1",
+                       dow:[1,2,3,4,5,6,0],
+                       type:"sdfasf",
+                       periods:[
+                         new Period({name:"first",start_time:"12:22"}),
+                         new Period({name:"ending_time",start_time:"16:06"}),
+                       ]
+                     }
     all_schedules.push(a_schedule)
     this.state = {
       currentTime: new AdjustedTime(),
@@ -355,28 +416,14 @@ class App extends Component {
       all_schedules: all_schedules,
       current_schedule: a_schedule,
     };
-
-    console.log("a_schedule:", a_schedule);
-    console.log("a_schedule.name:", a_schedule.name);
-    console.log("a_schedule.name():", a_schedule.name());
-    console.log("App. constructor   current_schedule: ", this.state.current_schedule);
-
-    console.log("App: ", this.state.currentTime);
   }
  
   // https://stackoverflow.com/questions/39426083/update-component-every-second-react
   componentDidMount() {
     //this.intervalID = setInterval( () => this.tick() , 1000);
   }
-
-  componentWillUnmount() {
-    clearInterval(this.intervalID);
-  }
-
-  tick() {
-    this.setState({ currentTime: new AdjustedTime() });
-    console.log("App: ", this.state.currentTime);
-  }
+  componentWillUnmount() { clearInterval(this.intervalID); }
+  tick() { this.setState({ currentTime: new AdjustedTime() }); }
 
   render() {
     return (
@@ -398,31 +445,4 @@ class App extends Component {
 }
 
 export default App;
-
-// 2 click onto settings control (need framework for visuals)
-// 3 make schedules for first run a static property of the classtimer
-// 4 buttons for classtimer generated according to data structure
-// 5 
-//
-//
-// schedule name: default mon
-// schedule sub-type: MS HS for me. for others lunch A lunch B or something I haven't seen some won't have subtypes at all
-// periods: name, start_time and end time implied by next row
-//
-//
-// Eddy specific. How to introduce actual time offset vs puter time.
-//
-// Timer only change would be to add arbitrary # of minutes into timer. and have beeping a setting to turn on/off
-// complexity is to make settings definable entirely within the page. save and set and reload.
-// webstorage. to have this offline.
-// maybe have online version so i can charge ppl money or show ads so i can money
-// schedule needs a state, county, school attribute for cluster of schedules.
-// school specific. so other attributes to make it faster to find.
-//
-//
-//
-//
-
-
-
 
