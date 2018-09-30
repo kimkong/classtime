@@ -293,7 +293,7 @@ class ClassPeriod {
     let now = new AdjustedTime(current_time)
     let period = this.current_period();
     if (!period || !period.in_active_period) {
-      return "XXXX"
+      return "before"
     }
     if (!period.next_period) {
       return "End of schedule"
@@ -324,6 +324,13 @@ class ClassTimerStatusPanel extends Component {
       next_period_name: class_period.next_period_name,
     };
   }
+
+  componentWillMount() {
+    let class_period = new ClassPeriod(this.props.current_schedule);
+    this.setState({
+      time_remaining_string: class_period.time_remaining(this.props.currentTime),
+    })
+  }
   render() {
     return (
       <div>
@@ -345,15 +352,13 @@ class ClassTimerStatusPanel extends Component {
   }
 }
 
+// REQUIRED PROPS:
+//   - currentTime - AdjustedTime
 class ClassTimerSettingsPanel extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { currentTime: new AdjustedTime() };
-  }
   render() {
     return (
       <div>
-        <ClassTime currentTime={this.state.currentTime} />
+        <ClassClock currentTime={this.props.currentTime} />
         <br/>
         <div className="timer_settings">settings:</div>
         <div>
@@ -373,17 +378,16 @@ class Counter extends Component {
     return (
       <div className="center-text"><span id="counter">00:00</span></div>
     )
-  }  
+  }
 }
 
 
-class ClassTime extends Component {
+class ClassClock extends Component {
   constructor(props) {
     super(props);
     //console.log("ClassTimer: ", this.props);
   }
   render() {
-    //<ClassTimerStatusPanel currentTime={this.props.currentTime} current_schedule={this.props.current_schedule} />
     return (
       <div>
         {this.props.currentTime.to_human()}
@@ -407,7 +411,7 @@ class App extends Component {
     let all_schedules = [
     ]
     // later use `new DailySchedule().loadSchedule`
-    let hour_offset = 8;
+    let hour_offset = 1;
     let a_schedule = { name:"Sample test Schedule 1",
                        dow:[1,2,3,4,5,6,0],
                        type:"sdfasf",
@@ -449,7 +453,9 @@ class App extends Component {
     clearInterval(this.intervalID);
   }
   tick() {
-    this.setState({ currentTime: new AdjustedTime() });
+    this.setState({
+      currentTime: new AdjustedTime()
+    });
   }
 
   render() {
@@ -462,7 +468,7 @@ class App extends Component {
             <ClassTimerStatusPanel current_schedule={this.state.current_schedule} currentTime={this.state.currentTime} />
           </div>
           <div className="panel right">
-            <ClassTimerSettingsPanel />
+            <ClassTimerSettingsPanel currentTime={this.state.currentTime} />
             <Counter />
 
           </div>
