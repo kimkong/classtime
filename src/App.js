@@ -326,7 +326,7 @@ class ClassTimerStatusPanel extends Component {
   }
   render() {
     return (
-      <div className="panel left">
+      <div>
         <div>
           <div className="timer_info">
             <span id="period_name">{this.state.current_schedule_name}</span>
@@ -346,21 +346,34 @@ class ClassTimerStatusPanel extends Component {
 }
 
 class ClassTimerSettingsPanel extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { currentTime: new AdjustedTime() };
+  }
   render() {
     return (
       <div>
-        <div className="timer_settings">CURRENT TIME  <span id="clock">&nbsp;</span></div>
-        <div className="timer_settings">SETTINGS:</div>
+        <ClassTime currentTime={this.state.currentTime} />
+        <br/>
+        <div className="timer_settings">settings:</div>
         <div>
           <input type="radio" id="contactChoice1" onClick="setScheduleType('MS')" name="contact" value="MS"/>
           <label for="contactChoice1">Middle School</label>
           <input type="radio" id="contactChoice2" onClick="setScheduleType('HS')" name="contact" value="HS" checked/>
           <label for="contactChoice2">High School</label>
         </div>
-        <div className="center-text"><span id="counter">00:00</span></div>
       </div>
     )
   }
+}
+
+class Counter extends Component {
+
+  render() {
+    return (
+      <div className="center-text"><span id="counter">00:00</span></div>
+    )
+  }  
 }
 
 
@@ -399,21 +412,21 @@ class App extends Component {
                        dow:[1,2,3,4,5,6,0],
                        type:"sdfasf",
                        periods:[
-                        new Period({ name: 'Period 0 (Optional)',    start_time: (6+hour_offset+':44' )}),
-                         new Period({ name: 'Passing to Period 1',    start_time: (7+hour_offset+':54' )}),
-                         new Period({ name: 'Period 1',              start_time: (8+hour_offset+':00' )}),
-                         new Period({ name: 'Passing to Period 2',    start_time: (8+hour_offset+':58' )}),
-                         new Period({ name: 'Period 2',              start_time: (9+hour_offset+':04' )}),
-                         new Period({ name: 'Snack',                  start_time: (10+hour_offset+':10')}),
-                         new Period({ name: 'Passing to Period 3',    start_time: (10+hour_offset+':19')}),
-                         new Period({ name: 'Period 3',              start_time: (10+hour_offset+':25')}),
-                         new Period({ name: 'Lunch (7-8)',            start_time: (11+hour_offset+':23')}),
-                         new Period({ name: 'Passing (7-8)',          start_time: (11+hour_offset+':54')}),
-                         new Period({ name: 'Period 4 (7-8)',        start_time: (12+hour_offset+':00')}),
-                         new Period({ name: 'Passing to Period 5',   start_time: (12+hour_offset+':58')}),
-                         new Period({ name: 'Period 5',              start_time: (13+hour_offset+':04')}),
-                         new Period({ name: 'Passing to Period 6',    start_time: (14+hour_offset+':02')}),
-                         new Period({ name: 'Period 6',              start_time: (14+hour_offset+':08')})
+                        new Period({ name: 'Period 0 (Optional)',   start_time: (6+hour_offset+':44' )}),
+                        new Period({ name: 'Passing to Period 1',   start_time: (7+hour_offset+':54' )}),
+                        new Period({ name: 'Period 1',              start_time: (8+hour_offset+':00' )}),
+                        new Period({ name: 'Passing to Period 2',   start_time: (8+hour_offset+':58' )}),
+                        new Period({ name: 'Period 2',              start_time: (9+hour_offset+':04' )}),
+                        new Period({ name: 'Snack',                 start_time: (10+hour_offset+':10')}),
+                        new Period({ name: 'Passing to Period 3',   start_time: (10+hour_offset+':19')}),
+                        new Period({ name: 'Period 3',              start_time: (10+hour_offset+':25')}),
+                        new Period({ name: 'Lunch (7-8)',           start_time: (11+hour_offset+':23')}),
+                        new Period({ name: 'Passing (7-8)',         start_time: (11+hour_offset+':54')}),
+                        new Period({ name: 'Period 4 (7-8)',        start_time: (12+hour_offset+':00')}),
+                        new Period({ name: 'Passing to Period 5',   start_time: (12+hour_offset+':58')}),
+                        new Period({ name: 'Period 5',              start_time: (13+hour_offset+':04')}),
+                        new Period({ name: 'Passing to Period 6',   start_time: (14+hour_offset+':02')}),
+                        new Period({ name: 'Period 6',              start_time: (14+hour_offset+':08')})
                        ]
                      }
     console.log(a_schedule)
@@ -435,15 +448,17 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <div className="App">
+      <div className="App">
+        <div>
           <h1>Class Time Minder: "{this.state.teacherName}"</h1>
-          // schedule for the day
-          // countdown info
-          <ClassTimerStatusPanel current_schedule={this.state.current_schedule} />
+          <div className="panel left">
+            // schedule for the day as an expanding panel?
+            <ClassTimerStatusPanel current_schedule={this.state.current_schedule} />
+          </div>
           <div className="panel right">
-          <ClassTime currentTime={this.state.currentTime} />
-          <ClassTimerSettingsPanel />
+            <ClassTimerSettingsPanel />
+            <Counter />
+
           </div>
           // timer
         </div>

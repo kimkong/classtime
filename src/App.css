@@ -1,31 +1,3 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
 
 
 // Major DOM settings
@@ -37,15 +9,20 @@ h1   { text-align:center; font-weight:normal;}
 
 
 // IDs
-#remaining_time {font-size: 160px; font-family: 'Lato', sans-serif; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080; font-variant: small-caps; } 
 #clock { font-family: 'Lato', sans-serif; text-align:center; }
+#counter { font-family: 'Lato', sans-serif; font-size: 6em; text-align: center;}
+#footer { text-align: center; }
+#footer a.logo { font-size: 1.25em; color:#eee; }
+#footer .logo-highlight { color:#f89406; }
 #name { font-variant:small-caps; }
 #next_period_name { font-variant:small-caps; margin-left: 1em;  }
 #period { font-variant:small-caps; }
-#counter { font-family: 'Lato', sans-serif; font-size: 6em; text-align: center;}
+#remaining_time {font-size: 160px; font-family: 'Lato', sans-serif; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080; font-variant: small-caps; } 
+
 
 // Classes
 .center-text { text-align: center; }
+.clearfix { clear:both; }
 .panel {float:left;}
 .panel.left { width: 70%; }
 .panel.right { width: 30%; }
