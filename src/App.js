@@ -178,26 +178,20 @@ class ClassTimerScheduleSelector extends Component {
 
 class AdjustedTime {
   constructor(current_time) {
-    // passed in a full date/time?
-    // passed in a short hh:mm time?
-    // pass in a Date object?
-
     if (current_time === undefined || current_time === null) {
-      //console.log("setting current time wih new Date()")
       this.now = new Date();
     } else if (typeof(current_time) === "string") {
-      //console.log("parsing current_time and setting:", current_time)
       let tmp = String(current_time).match(/^(\d+):(\d+)$/);
       let hours = parseInt(tmp[1], 10);
       let minutes = parseInt(tmp[2], 10);
       let tmp_now = new Date()
       let [year, month, day] = [tmp_now.getFullYear(), tmp_now.getMonth(), tmp_now.getDate()];
       this.now = new Date(year, month, day, hours, minutes, 0, 0);
+    } else if (Object.getPrototypeOf(current_time) == AdjustedTime.prototype ) {
+      this.now = current_time.now
     } else {
-      //console.log("setting with current_time  assusming sane value for now", current_time)
       this.now = current_time;
     }
-    //console.log("nownow?  ", current_time);
   }
 
   ms_duration_to_human(ms) {
@@ -215,10 +209,8 @@ class AdjustedTime {
   }
 
   calculated_remaining(ending_time_in_hh_mm) {
-    let ending_time = new AdjustedTime(ending_time_in_hh_mm);
-    let now_time = this.now.getDate();
-    debugger
-
+    let ending_time = new AdjustedTime(ending_time_in_hh_mm).getTime();
+    let now_time = this.now.getTime();
     return this.ms_duration_to_human(ending_time - now_time);
   }
 
@@ -299,9 +291,16 @@ class ClassPeriod {
 
   time_remaining(current_time) {
     let now = new AdjustedTime(current_time)
-    //console.log("current_time .now? ", current_time)
-    //let remaining_time = now.calculated_remaining(this.state.current_period_end);
-    //return remaining_time;
+    let period = this.current_period();
+    if (!period || !period.in_active_period) {
+      return "XXXX"
+    }
+    if (!period.next_period) {
+      return "End of schedule"
+    }
+
+    let remaining = period.current_period.toAdjustedTime().calculated_remaining()
+    return remaining;
   }
   display_period_span() {
     let start_time = this.current_period_start;
@@ -315,6 +314,7 @@ class ClassTimerStatusPanel extends Component {
   constructor(props) {
     super(props);
 
+    console.log("ClassTimerStatusPanel: this.props.currentTime => ", this.props.currentTime)
     let class_period = new ClassPeriod(props.current_schedule);
     this.state = {
       class_period: class_period,
@@ -441,10 +441,16 @@ class App extends Component {
 
   // https://stackoverflow.com/questions/39426083/update-component-every-second-react
   componentDidMount() {
-    //this.intervalID = setInterval( () => this.tick() , 1000);
+    console.log("componentDidMount")
+    this.intervalID = setInterval( () => this.tick() , 1000);
   }
-  componentWillUnmount() { clearInterval(this.intervalID); }
-  tick() { this.setState({ currentTime: new AdjustedTime() }); }
+  componentWillUnmount() {
+    console.log("componentWillUnmount")
+    clearInterval(this.intervalID);
+  }
+  tick() {
+    this.setState({ currentTime: new AdjustedTime() });
+  }
 
   render() {
     return (
@@ -453,7 +459,7 @@ class App extends Component {
           <h1>Class Time Minder: "{this.state.teacherName}"</h1>
           <div className="panel left">
             // schedule for the day as an expanding panel?
-            <ClassTimerStatusPanel current_schedule={this.state.current_schedule} />
+            <ClassTimerStatusPanel current_schedule={this.state.current_schedule} currentTime={this.state.currentTime} />
           </div>
           <div className="panel right">
             <ClassTimerSettingsPanel />
