@@ -209,8 +209,8 @@ class AdjustedTime {
   }
 
   calculated_remaining(ending_time_in_hh_mm) {
-    let ending_time = new AdjustedTime(ending_time_in_hh_mm).getTime();
-    let now_time = this.now.getTime();
+    let ending_time = new AdjustedTime(ending_time_in_hh_mm || this.now).getTime();
+    let now_time = new AdjustedTime().getTime();
     return this.ms_duration_to_human(ending_time - now_time);
   }
 
@@ -299,7 +299,7 @@ class ClassPeriod {
       return "End of schedule"
     }
 
-    let remaining = period.current_period.toAdjustedTime().calculated_remaining()
+    let remaining = period.next_period.toAdjustedTime().calculated_remaining()
     return remaining;
   }
   display_period_span() {
@@ -313,8 +313,7 @@ class ClassPeriod {
 class ClassTimerStatusPanel extends Component {
   constructor(props) {
     super(props);
-
-    console.log("ClassTimerStatusPanel: this.props.currentTime => ", this.props.currentTime)
+    // console.log("ClassTimerStatusPanel: this.props.currentTime => ", this.props.currentTime)
     let class_period = new ClassPeriod(props.current_schedule);
     this.state = {
       class_period: class_period,
@@ -324,12 +323,22 @@ class ClassTimerStatusPanel extends Component {
       next_period_name: class_period.next_period_name,
     };
   }
-
   componentWillMount() {
     let class_period = new ClassPeriod(this.props.current_schedule);
     this.setState({
       time_remaining_string: class_period.time_remaining(this.props.currentTime),
     })
+    this.intervalID = setInterval( () => this.tick() , 1000);
+  }
+  componentWillUnmount() {
+    console.log("componentWillUnmount")
+    clearInterval(this.intervalID);
+  }
+  tick() {
+    this.setState({
+      time_remaining_string: this.state.class_period.time_remaining(this.props.currentTime),
+      currentTime: new AdjustedTime()
+    });
   }
   render() {
     return (
