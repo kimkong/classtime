@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Class Time Minder</title>
+<meta charset="utf-8"/>
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAgICAAP///wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAhAAAAAAECICIBAAAAEiIgIiIQAAACIiIiIgAAASIiIiIiIQACIiIiIiIiAAAAIiMzMwAAAiIiIyIiIgABIiIjIiIhAAACIiMiIgAAABIiIyIiEAAAAQIjIgEAAAAAASAhAAAAAAAAAAAAAAD//wAA+D8AAOAPAADABwAAgAMAAIADAAAAAQAAAAEAAAABAAAAAQAAAAEAAIADAACAAwAAwAcAAOAPAAD4PwAA" rel="icon" type="image/x-icon" />
+
+<style type="text/css">
+html { margin: 2em; }
+body { font-family: 'Lato', sans-serif; background-color:#232323; color: #efefef;}  
+a:link, a:visited { color:#8a83ff; }
+div  {color:#aaa;}
+h1 	 { text-align:center; font-weight:normal;}
+
+#remaining_time {font-size: 160px; font-family: 'Lato', sans-serif; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080; font-variant: small-caps; } 
+#clock { font-family: 'Lato', sans-serif; text-align:center; }
+#name { font-variant:small-caps; }
+#period { font-variant:small-caps; }
+#counter { font-family: 'Lato', sans-serif; font-size: 6em; }
+.center-text { text-align: center; }
+.panel {float:left; height:22rem;}
+
+button {
+    display: inline-block;
+    border: none;
+    padding: .75rem 1rem;
+    margin: 0;
+    text-decoration: none;
+    background: #0069ed;
+    color: #ffffff;
+    font-variant: small-caps;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out, 
+                transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+button:hover, button:focus {background: #0053ba; }
+button:focus {outline: 1px solid #fff; outline-offset: -4px; }
+button:active {transform: scale(0.99); }
+</style>
+
+<script type="text/javascript"> var override = "default"; </script>
+<script src="schedule_data.js"></script> 
+
+
+</head>
+<body onload="showCountdown(data); setInterval('showCountdown(data)', 1000 )">
+
+<div style="width:100%">
+  <br/>
+  <br/>
+  <br/>
+
+	<div class="panel" style="width:70%;">
+
+		<div style="position:relative; top:10%;">
+      <div style="text-align: center; font-size: 1.5em; margin-top: 1em;">
+        <span id="period_name">&nbsp;</span>
+      </div>
+      <div style="text-align: center; font-size: 4em;">
+        <span id="remaining_time">&nbsp;</span>
+      </div>
+      <div style="text-align: center; font-size: 1.5em; margin-top: 1em;">
+        <span id="period_span">&nbsp;</span>
+	      <span id="next_period_name">&nbsp;</span>
+	    </div>
+		</div>
+
+	</div>
+
+	<div class="panel" style="width:30%;">
+		<div style="font-size: 1.25em; font-variant: small-caps; color:#666">CURRENT TIME  <span id="clock">&nbsp;</span></div> 
+		<br>
+		<br>
+		<div style="font-size: 1.25em; font-variant: small-caps; color:#666">SETTINGS:</div> 
+		     
+		<div>
+		  <input type="radio" id="contactChoice1"
+		   onClick="setScheduleType('MS')", name="contact" value="MS">
+		  <label for="contactChoice1">Middle School</label>
+
+		  <input type="radio" id="contactChoice2"
+		   onClick="setScheduleType('HS')", name="contact" value="HS" checked>
+		  <label for="contactChoice2">High School</label>
+		</div>
+
+		<br/>
+		<br/>
+		<hr>
+		<br/>
+		<br/>
+
+		<div class="center-text" style="text-align:center;height:6em; "><span id="counter">00:00</span></div>
+	</div>
+
+	<div class="panel" style="width:70%;height:100%;">
+    <div style="text-align: center; font-size: 1.5em;">
+      <button onClick="setSchedule('default')", type="button">default</button> 
+      <button onClick="setSchedule('RallyA')", 	type="button">rally a</button> 
+      <button onClick="setSchedule('RallyB')", 	type="button">rally b</button> 
+      <button onClick="setSchedule('Block')", 	type="button">block</button> 
+      <button onClick="setSchedule('Finals')", 	type="button">finals</button> 
+      <button onClick="setSchedule('Minimum')", type="button">minimum</button> 
+      <button onClick="setSchedule('Test')", 		type="button">test</button> 
+    </div>
+	</div>
+
+	<div class="panel" style="width:30%;height:100%;">
+		<div class="timer_buttons center-text">
+      <!-- add input field for random timer -->
+	    <button onClick="countdown(10)", type="button">10</button> 
+	    <button onClick="countdown(5)",  type="button">5</button> 
+	    <button onClick="countdown(3)",  type="button">3</button> 
+	    <button onClick="countdown(2)",  type="button">2</button> 
+	    <button onClick="countdown(1)",  type="button">1</button> 
+	    <button onClick="clearCountdown()",  type="button">0</button> 
+		</div>
+	</div>
+</div>
+
+<div style="clear: both;"> </div>
+
+
+<br/>
+<br/>
+<br/>
+
+<hr/>
+<p><small>Revised 2018-08-11 &copy;2018 <a href="https://www.dynawebworks.com">dynaWEBworks</a></small></p>
+
+</body>
+</html>
+
+
+
+
+
+
+
+<script type="text/javascript">
+<!--
+countdown_timer = null;
+schedule_type   = "HS";   // SET TO MS OR HS
+timer_minutes   = 0;
+
+
+function setSchedule(name) {schedule_name = name; }
+
+function setScheduleType(type) {
+	schedule_type = type;
+}
+
+function clearCountdown() {
+  clearTimeout(countdown_timer);
+  countdown_timer = null;
+  var counter = document.getElementById("counter");
+  counter.innerHTML = "0:00"; 
+}
+
+function countdown(minutes) {
+  clearCountdown();
+
+  var seconds = 60;
+  var mins = minutes
+    function tick() {
+      //This script expects an element with an ID = "counter". You can change that to what ever you want. 
+      var counter = document.getElementById("counter");
+      var current_minutes = mins-1;
+      seconds--;
+      counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+      if (countdown_timer) {
+        clearTimeout(countdown_timer);
+        countdown_timer = null;
+      }
+      if ( seconds > 0 ) {
+        countdown_timer = setTimeout(tick, 1000);
+      } else {
+        if(mins > 1){
+          countdown_timer = countdown(mins-1);
+        }
+      }
+  		if (minutes==1 && seconds==3) { 
+  	  	beep(100, 420, 200);
+ 				document.getElementById("counter").style.color = "#ffff66";
+   	  };
+  		if (minutes==1 && seconds==2) { 
+  	  	beep(100, 420, 200); 
+ 				document.getElementById("counter").style.color = "#ffb366";
+  	  };
+  		if (minutes==1 && seconds==1) { 
+  	  	beep(100, 420, 200);
+ 				document.getElementById("counter").style.color = "#ff6666";
+  	  };
+  		if (minutes==1 && seconds==0) { 
+  	  	beep(120, 640, 600);
+ 				document.getElementById("counter").style.color = "#ff0000";
+  		};
+    }
+  tick();
+}
+
+
+a=new AudioContext() // browsers limit the number of concurrent audio contexts, so you better re-use'em
+
+function beep(vol, freq, duration){
+  v=a.createOscillator()
+  u=a.createGain()
+  v.connect(u)
+  v.frequency.value=freq
+  v.type="square"
+  u.connect(a.destination)
+  u.gain.value=vol*0.01
+  v.start(a.currentTime)
+  v.stop(a.currentTime+duration*0.001)
+}
+
+
+
+function timeNow() {
+	t = new Date();
+	return t;
+}
+
+function in_time_span(current_period, now) {
+	var st_t = new Date
+	st_t.setHours(current_period.start_time.split(":")[0])
+	st_t.setMinutes(current_period.start_time.split(":")[1])
+	st_t.setSeconds(0)
+	st_t = st_t.getTime();
+
+	var end_t = new Date
+	end_t.setHours(current_period.end_time.split(":")[0])
+	end_t.setMinutes(current_period.end_time.split(":")[1])
+	end_t.setSeconds(0)
+	end_t = end_t.getTime();
+	
+	now = now.getTime();
+
+	// console.log("s:"+st_t)
+	// console.log("e:"+end_t)
+	// console.log("n:"+now)
+	// console.log("test:"+now >= st_t && now <= end_t )
+	if (now >= st_t && now <= end_t ) {
+		return current_period;
+	};
+	return false;
+}
+
+function getTimeRemaining(a_period, now){
+	var end_t = new Date
+	end_t.setHours(a_period.end_time.split(":")[0])
+	end_t.setMinutes(a_period.end_time.split(":")[1])
+	end_t.setSeconds(0);
+	end_t = end_t.getTime();
+
+	time_remaining = end_t - now.getTime();
+	time_remaining = time_remaining / 1000;
+  
+  hrs = Math.floor(time_remaining / 3600)
+  mins = Math.floor((time_remaining -hrs*3600)/60)
+  mins = timeFormatter(mins);
+  secs = Math.floor(time_remaining -(hrs*3600 + mins*60) )
+  secs = timeFormatter(secs);
+  if (hrs==0) {
+		time_remaining_str = mins+"m  "+secs
+  } else {
+		time_remaining_str = hrs+":"+mins+"m "+secs
+  }
+  return time_remaining_str;
+}
+
+function dateToHumanTime(time) {
+	hrs  = time.getHours();
+  mins = timeFormatter(time.getMinutes());
+  secs = timeFormatter(time.getSeconds());
+  
+  time_str = hrs+":"+mins+":"+secs
+  return time_str;
+}
+
+function timeNow() {
+	t = new Date();
+	return t;
+}
+
+function timeFormatter(num) {
+  num = ""+num;
+  length = num.length
+  
+  if (length==1){
+    num = "0"+num;
+  } else if (length>1) {
+    num
+  }
+  
+  return num
+}
+
+function checkDow(schedule, now) {
+	for (var i = 0; i < schedule.dow.length; i++) {
+    if (schedule.dow[i] == now.getDay()) {
+      return schedule;
+    }
+  }
+  return false;
+}
+
+function selectSchedule(schedules, schedule_type, schedule_name, now) {
+
+	// NOT checking for schedule_type yet. 
+	if (schedule_name=="default" || schedule_name=="") {
+		for (var i = 0; i < schedules.length; i++) {
+	    if ( checkDow(schedules[i], now) && schedules[i].type==schedule_type ) {
+	    	return schedules[i]
+	    }
+		} 
+		alert("No default schedule found.");
+	} 
+	for (var i = 0; i < schedules.length; i++) {
+    if (schedules[i].name==schedule_name) {
+    	return schedules[i]
+    }
+	} 
+}
+
+
+
+function showCountdown(schedules) {
+	now = timeNow();
+  schedule = selectSchedule(schedules, schedule_type, schedule_name, now);
+
+	for (var i = 0; i < schedule.periods.length; i++) {
+		// console.log("current schedule: "+schedule_name);
+    var current_period = in_time_span(schedule.periods[i], now);
+		// console.log("current period: "+current_period.name);
+
+    if (current_period == false) {
+      continue;
+    }
+    document.getElementById("clock").firstChild.nodeValue = dateToHumanTime(now);
+    document.getElementById("name").firstChild.nodeValue = schedule.name;
+    document.getElementById("period_name").firstChild.nodeValue = current_period.name;
+    document.getElementById("period_span").firstChild.nodeValue = "  ["+current_period.start_time+" to "+current_period.end_time+"]";
+    document.getElementById("remaining_time").firstChild.nodeValue = getTimeRemaining(current_period, now);
+	} 
+
+}
+
+showCountdown(data)
+
+
+// -->
+</script>
+
